@@ -21,8 +21,12 @@ def pregunta_01():
     214
 
     """
-    return
-
+    with open("data.csv") as fh:
+        suma = 0
+        for line in fh:
+            suma += int(line[2])
+    
+    return suma
 
 def pregunta_02():
     """
@@ -39,7 +43,13 @@ def pregunta_02():
     ]
 
     """
-    return
+    with open("data.csv") as fh:
+        d = dict()
+        for line in fh:
+            letra = line[0]
+            d[letra] = d.get(letra, 0)+1
+
+    return sorted([tup for tup in d.items()])
 
 
 def pregunta_03():
@@ -57,7 +67,14 @@ def pregunta_03():
     ]
 
     """
-    return
+    with open("data.csv") as fh:
+        d = dict()
+        for line in fh:
+            letra = line[0]
+            valor = int(line[2])
+            d[letra] = d.get(letra, 0)+valor
+
+    return sorted([tup for tup in d.items()])
 
 
 def pregunta_04():
@@ -82,8 +99,13 @@ def pregunta_04():
     ]
 
     """
-    return
+    with open("data.csv") as fh:
+        d = dict()
+        for line in fh:
+            mes = line[9:11]
+            d[mes] = d.get(mes, 0)+1
 
+    return sorted([tup for tup in d.items()])
 
 def pregunta_05():
     """
@@ -100,7 +122,18 @@ def pregunta_05():
     ]
 
     """
-    return
+    with open("data.csv") as fh:
+        d = dict()
+        for line in fh:
+            letra = line[0]
+            valor = int(line[2])
+            d[letra] = d.get(letra, [0, float("inf")])
+            if d[letra][0] < valor:
+                d[letra][0] = valor
+            if d[letra][1] > valor:
+                d[letra][1] = valor
+
+    return sorted([(item[0], item[1][0], item[1][1]) for item in d.items()])
 
 
 def pregunta_06():
@@ -125,7 +158,22 @@ def pregunta_06():
     ]
 
     """
-    return
+    with open("data.csv") as fh:
+        d = dict()
+        for line in fh:
+            dic = line[::-1][:line[::-1].find("\t")][::-1]
+            items = tuple(dic.rstrip("\n").split(","))
+            for item in items:
+                letras, valor = tuple(item.split(":"))
+                valor = int(valor)
+                d[letras] = d.get(letras, [0, float("inf")])
+                if d[letras][0] < valor:
+                    d[letras][0] = valor
+                if d[letras][1] > valor:
+                    d[letras][1] = valor
+
+    return sorted([(item[0], item[1][1], item[1][0]) for item in d.items()])
+
 
 
 def pregunta_07():
@@ -149,7 +197,15 @@ def pregunta_07():
     ]
 
     """
-    return
+    with open("data.csv") as fh:
+        d = dict()
+        for line in fh:
+            letra = line[0]
+            valor = int(line[2])
+            d.setdefault(valor, []).append(letra)
+
+    return sorted([item for item in d.items()])
+
 
 
 def pregunta_08():
@@ -174,7 +230,14 @@ def pregunta_08():
     ]
 
     """
-    return
+    with open("data.csv") as fh:
+        d = dict()
+        for line in fh:
+            letra = line[0]
+            valor = int(line[2])
+            d.setdefault(valor, set()).add(letra)
+
+    return sorted([(item[0], sorted(list(item[1]))) for item in d.items()])
 
 
 def pregunta_09():
@@ -197,7 +260,16 @@ def pregunta_09():
     }
 
     """
-    return
+    with open("data.csv") as fh:
+        d = dict()
+        for line in fh:
+            dic = line[::-1][:line[::-1].find("\t")][::-1]
+            items = tuple(dic.rstrip("\n").split(","))
+            for item in items:
+                letras, _ = tuple(item.split(":"))
+                d[letras] = d.get(letras, 0)+1
+
+    return dict(sorted(d.items()))
 
 
 def pregunta_10():
@@ -218,8 +290,14 @@ def pregunta_10():
 
 
     """
-    return
-
+    with open("data.csv") as fh:
+        res = list()
+        for line in fh:
+            letra = line[0]
+            col4 = line[15:line[16:].find("\t")+16]
+            col5 = line[line[16:].find("\t")+17:]
+            res.append((letra, len(col4.split(",")), len(col5.split(","))))
+    return res
 
 def pregunta_11():
     """
@@ -239,7 +317,15 @@ def pregunta_11():
 
 
     """
-    return
+    with open("data.csv") as fh:
+        d = dict()
+        for line in fh:
+            valor = int(line[2])
+            col4 = line[15:line[16:].find("\t")+16]
+            for letra in col4.split(","):
+                d[letra] = d.get(letra, 0)+valor
+    return dict(sorted(d.items()))
+
 
 
 def pregunta_12():
@@ -257,4 +343,12 @@ def pregunta_12():
     }
 
     """
-    return
+    with open("data.csv") as fh:
+        d = dict()
+        for line in fh:
+            letra = line[0]
+            col5 = line[line[16:].find("\t")+17:]
+            for item in col5.split(","):
+                valor = int(item.split(":")[1])
+                d[letra] = d.get(letra, 0) + valor
+    return dict(sorted(d.items()))
